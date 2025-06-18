@@ -25,11 +25,5 @@ Os seguintes testes estão implementados na requisição `POST /api/v1/Orientado
 Esses testes foram implementados utilizando o Postman e validados via linha de comando com o Newman.  
 O sistema de autenticação e token CSRF também foi integrado para assegurar o correto funcionamento das requisições.
 
-"""
 
-resumo_path = "/mnt/data/README_RESUMO.md"
-with open(resumo_path, "w", encoding="utf-8") as f:
-    f.write(readme_resumo)
-
-resumo_path
 
