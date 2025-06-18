@@ -1,4 +1,4 @@
-readme_content = """# 📡 Testes de API - FetinNet com Postman
+## 📡 Testes de API - FetinNet com Postman
 
 Este projeto contém os testes da API da plataforma [FetinNet](https://fetin-api.confianopai.com), desenvolvidos durante a disciplina. O objetivo é validar os endpoints da aplicação de forma automatizada utilizando o Postman e o Newman.
 
