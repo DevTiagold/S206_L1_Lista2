@@ -1,0 +1,209 @@
+{
+	"info": {
+		"_postman_id": "82544250-df20-40f5-ada6-f812ef7907ed",
+		"name": "Lista2_Orientador",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45966681",
+		"_collection_link": "https://tiago-5171012.postman.co/workspace/Tiago's-Workspace~86018d11-0d63-4cb0-8895-667fa812ea22/collection/45966681-82544250-df20-40f5-ada6-f812ef7907ed?action=share&source=collection_link&creator=45966681"
+	},
+	"item": [
+		{
+			"name": "RequisitandoToken",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();\r",
+							"pm.environment.set('Cookie', response.token);\r",
+							"\r",
+							"const xsrf = postman.getResponseCookie(\"XSRF-TOKEN\");\r",
+							"if (xsrf) {\r",
+							"    pm.environment.set(\"xsrf_token\", xsrf.value);\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASEURL\n}}get-csrf-token",
+					"host": [
+						"{{BASEURL\n}}get-csrf-token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RealizandoLogin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Salva a resposta em texto puro\r",
+							"let responseText = pm.response.text();\r",
+							"\r",
+							"// Se quiser salvar isso em uma variável de ambiente:\r",
+							"pm.environment.set(\"auth_response\", responseText);\r",
+							"\r",
+							"// Se quiser verificar o sucesso:\r",
+							"pm.test(\"Login retornou sucesso em texto\", () => {\r",
+							"    pm.expect(responseText).to.include(\"Authentication successful\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "{{Cookie}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"lara@\",\r\n  \"password\": \"123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASEURL\n}}login",
+					"host": [
+						"{{BASEURL\n}}login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TestesParaOrientador",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// ✅ Teste 1: Verifica se a resposta possui corpo e se está em formato JSON\r",
+							"pm.test(\"Resposta em JSON\", () => {\r",
+							"    pm.response.to.be.withBody; // Garante que a resposta não está vazia\r",
+							"    pm.response.to.be.json;     // Verifica se o conteúdo retornado é um JSON válido\r",
+							"});\r",
+							"\r",
+							"// ✅ Teste 2: Verifica se o status HTTP retornado é 200 (OK)\r",
+							"pm.test(\"Status 200 OK\", () => {\r",
+							"    pm.response.to.have.status(200); // Verifica se o código HTTP é exatamente 200\r",
+							"});\r",
+							"\r",
+							"// ✅ Teste 3: Verifica se o tempo de resposta é menor que 1 segundo\r",
+							"pm.test(\"Tempo de resposta < 1s \", () => {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000); // Verifica se a API respondeu em menos de 1000 ms\r",
+							"});\r",
+							"\r",
+							"// ✅ Teste 4: Teste rigoroso de performance – exige resposta abaixo de 100 ms\r",
+							"pm.test(\"Tempo de resposta < 100 ms (rigoroso)\", () => {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(100); // Reforça a rapidez esperada do endpoint\r",
+							"});\r",
+							"\r",
+							"// ✅ Teste 5: Verifica se o campo `type` no JSON da resposta é igual a \"about:blank\"\r",
+							"pm.test(\"Campo type é 'about:blank'\", () => {\r",
+							"    const res = pm.response.json();           // Faz o parse da resposta como JSON\r",
+							"    pm.expect(res.type).to.eql(\"about:blank\"); // Garante que a estrutura segue o padrão RFC 7807\r",
+							"});\r",
+							"\r",
+							"// ✅ Teste 6: Verifica que o campo `title` **não** está marcando um erro\r",
+							"pm.test(\"Título não é 'ERROR'\", () => {\r",
+							"    const res = pm.response.json();             // Faz o parse da resposta como JSON\r",
+							"    pm.expect(res.title).to.not.eql(\"ERROR\");   // Garante que não houve erro reportado pelo backend\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Pega data e hora atual\r",
+							"const now = new Date();\r",
+							"\r",
+							"// Monta um identificador único com AAAAMMDD-HHMMSS\r",
+							"const timestamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}-${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;\r",
+							"\r",
+							"// Define valores únicos para o teste\r",
+							"const nome = `Orientador ${timestamp}`;\r",
+							"const email = `orientador${timestamp}@fetin.com`;\r",
+							"\r",
+							"// Salva nas variáveis de ambiente\r",
+							"pm.environment.set(\"nome_orientador\", nome);\r",
+							"pm.environment.set(\"email_orientador\", email);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "{{xsrf_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"{{email_orientador}}\",\r\n  \"nome\": \"{{nome_orientador}}\",\r\n  \"password\": \"123456\",\r\n  \"acesso\": \"PROFESSOR\",\r\n  \"ativo\": 1\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASEURL\n}}api/v1/Orientador/add",
+					"host": [
+						"{{BASEURL\n}}api"
+					],
+					"path": [
+						"v1",
+						"Orientador",
+						"add"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
