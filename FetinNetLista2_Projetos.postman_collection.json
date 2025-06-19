@@ -1,0 +1,220 @@
+{
+	"info": {
+		"_postman_id": "488b69fc-cb41-4a4b-b882-b2fb2c8c37b4",
+		"name": "FetinNetLista2_Projetos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45105871"
+	},
+	"item": [
+		{
+			"name": "get-csrf-token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();\r",
+							"pm.environment.set('Cookie', response.token);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BaseURL}}/get-csrf-token",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"get-csrf-token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "{{Cookie}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"lara@\",\r\n    \"password\": \"123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseURL}}/login",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Projetos_3_Testes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Verificação se cada item tem os campos básicos esperados\r",
+							"pm.test(\"Cada item tem os campos básicos esperados\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    jsonData.forEach(function(item) {\r",
+							"        pm.expect(item).to.have.property('numeroGrupo');\r",
+							"        pm.expect(item).to.have.property('titulo');\r",
+							"        pm.expect(item).to.have.property('orientador');\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"//Verificação se cada lista de time não está vazio\r",
+							"pm.test(\"Lista de times não está vazia\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.length).to.be.above(0);\r",
+							"});\r",
+							"\r",
+							"//Verificação para forçar erro: verificar se todos os orientadores têm o campo 'senha'\r",
+							"pm.test(\"Todos os orientadores têm campo 'senha'\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    jsonData.forEach(function(item) {\r",
+							"        pm.expect(item.orientador).to.have.property('senha');\r",
+							"    });\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseURL}}/api/v1/Time/all",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"Time",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Projeto29_3_Testes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Verificação se o status é 200 \r",
+							"pm.test(\"Status code é 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//Verificação se o site responde em menos de 1000ms\r",
+							"pm.test(\"Tempo de resposta é menor do que 1000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});\r",
+							"\r",
+							"//Verificação se a resposta é JSON\r",
+							"pm.test(\"Resposta é um JSON\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BaseURL}}/api/v1/Time/29",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"Time",
+						"29"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
