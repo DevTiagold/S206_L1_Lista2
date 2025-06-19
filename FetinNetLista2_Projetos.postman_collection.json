@@ -1,11 +1,111 @@
 {
 	"info": {
-		"_postman_id": "488b69fc-cb41-4a4b-b882-b2fb2c8c37b4",
+		"_postman_id": "d3c98d6d-310b-4515-902c-cda286a6661b",
 		"name": "FetinNetLista2_Projetos",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "45105871"
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "44751199"
 	},
 	"item": [
+		{
+			"name": "Alunos",
+			"item": [
+				{
+					"name": "Cadastro Aluno - Sucesso",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Generate a random string for unique values\r",
+									"function randomString(length) {\r",
+									"    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';\r",
+									"    let result = '';\r",
+									"    for (let i = 0; i < length; i++) {\r",
+									"        result += chars.charAt(Math.floor(Math.random() * chars.length));\r",
+									"    }\r",
+									"    return result;\r",
+									"}\r",
+									"\r",
+									"// Generate dynamic variables\r",
+									"const randomEmail = `user_${randomString(5)}@example.com`;\r",
+									"const randomName = `Name_${randomString(6)}`;\r",
+									"const randomPassword = randomString(12);\r",
+									"\r",
+									"// Set variables in the environment (or collection/local scope)\r",
+									"pm.variables.set('email', randomEmail);\r",
+									"pm.variables.set('nome', randomName);\r",
+									"pm.variables.set('password', randomPassword);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{email}}\",\r\n    \"nome\": \"{{nome}}\",\r\n    \"password\": \"{{password}}\",\r\n    \"acesso\": \"USER\",\r\n    \"ativo\": 1\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BaseURL}}/api/v1/Aluno/add"
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastro Aluno - Erro (Ja cadastrado)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"jacadastrado@gmail.com\",\r\n    \"nome\": \"USER2\",\r\n    \"password\": \"123\",\r\n    \"acesso\": \"USER\",\r\n    \"ativo\": 1\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{BaseURL}}/api/v1/Aluno/add"
+					},
+					"response": []
+				},
+				{
+					"name": "Obtem todos os alunos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"url": "{{BaseURL}}/api/v1/Aluno/all"
+					},
+					"response": []
+				}
+			],
+			"description": "Casos de teste para o contexto de alunos da API."
+		},
 		{
 			"name": "get-csrf-token",
 			"event": [
@@ -34,15 +134,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{BaseURL}}/get-csrf-token",
-					"host": [
-						"{{BaseURL}}"
-					],
-					"path": [
-						"get-csrf-token"
-					]
-				}
+				"url": "{{BaseURL}}/get-csrf-token"
 			},
 			"response": []
 		},
@@ -85,15 +177,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BaseURL}}/login",
-					"host": [
-						"{{BaseURL}}"
-					],
-					"path": [
-						"login"
-					]
-				}
+				"url": "{{BaseURL}}/login"
 			},
 			"response": []
 		},
@@ -155,18 +239,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{BaseURL}}/api/v1/Time/all",
-					"host": [
-						"{{BaseURL}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"Time",
-						"all"
-					]
-				}
+				"url": "{{BaseURL}}/api/v1/Time/all"
 			},
 			"response": []
 		},
@@ -201,18 +274,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{BaseURL}}/api/v1/Time/29",
-					"host": [
-						"{{BaseURL}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"Time",
-						"29"
-					]
-				}
+				"url": "{{BaseURL}}/api/v1/Time/29"
 			},
 			"response": []
 		}
