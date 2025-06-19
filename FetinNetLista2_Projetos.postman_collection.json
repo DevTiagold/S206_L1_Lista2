@@ -277,6 +277,80 @@
 				"url": "{{BaseURL}}/api/v1/Time/29"
 			},
 			"response": []
-		}
-	]
+		},
+		{
+      "name": "Projetos_Validacao",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Cada projeto tem ao menos um aluno\", () => {",
+              "  projetos.forEach(p => {",
+              "    pm.expect(p.alunos.length).to.be.above(0);",
+              "  });",
+              "});",
+              "",
+              "pm.test(\"Campos principais têm tipos corretos\", () => {",
+              "  projetos.forEach(p => {",
+              "    pm.expect(p.id).to.be.a('number');",
+              "    pm.expect(p.titulo).to.be.a('string');",
+              "    pm.expect(p.categoria.nome).to.be.a('string');",
+              "  });",
+              "});",
+              "",
+              "pm.test(\"Projetos estão ordenados por ID crescente\", () => {",
+              "  for (let i = 1; i < projetos.length; i++) {",
+              "    pm.expect(projetos[i].id).to.be.above(projetos[i - 1].id);",
+              "  }",
+              "});",
+              "",
+              "pm.test(\"Todas as categorias têm ID numérico válido\", () => {",
+              "  projetos.forEach(p => {",
+              "    pm.expect(p.categoria).to.have.property('id');",
+              "    pm.expect(p.categoria.id).to.be.a('number');",
+              "    pm.expect(p.categoria.id).to.be.above(0);",
+              "  });",
+              "});",
+              "",
+              "pm.test(\"Todos os resumos têm pelo menos 30 caracteres\", () => {",
+              "  projetos.forEach(p => {",
+              "    pm.expect(p).to.have.property('resumo');",
+              "    pm.expect(p.resumo.length).to.be.at.least(30);",
+              "  });",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{BaseURL}}/api/v1/Projeto/all",
+          "host": [
+            "{{BaseURL}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "Projeto",
+            "all"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
 }
