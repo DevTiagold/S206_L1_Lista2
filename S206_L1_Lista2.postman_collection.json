@@ -1,0 +1,286 @@
+{
+	"info": {
+		"_postman_id": "27fe9ad3-2635-44ab-a7b3-b2ae8e00e360",
+		"name": "S206_L1_Lista2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45101404",
+		"_collection_link": "https://blue-astronaut-3739833.postman.co/workspace/L%C3%ADvia-Cec%C3%ADlia-Gomes-Silva's-Wor~9d7494f5-4e8d-4a57-89ac-7a15ea7ff9c4/collection/45101404-27fe9ad3-2635-44ab-a7b3-b2ae8e00e360?action=share&source=collection_link&creator=45101404"
+	},
+	"item": [
+		{
+			"name": "get-csrf-token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();\r",
+							"pm.environment.set('Cookie', response. token);\r",
+							"\r",
+							"const xsrf = postman.getResponseCookie(\"XSRF-TOKEN\");\r",
+							"if (xsrf) {\r",
+							"pm.environment.set(\"xsrf_token\", xsrf.value);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASEURL}}get-csrf-token",
+					"host": [
+						"{{BASEURL}}get-csrf-token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let responseText = pm.response.text();  \r",
+							"pm.environment.set(\"auth_response\", responseText); \r",
+							"pm.test(\"Login retornou sucesso em texto\", function () { \r",
+							"    pm.expect(responseText).to.include('Authentication successful'); \r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "{{Cookie}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"lara@\",\r\n    \"password\": \"123\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASEURL}}login",
+					"host": [
+						"{{BASEURL}}login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deve criar um novo aluno com sucesso",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Deve criar um novo aluno com sucesso\", function () {\r",
+							"    pm.response.to.have.status(200);  // Verifica o código de status 200\r",
+							"    var response = pm.response.json();\r",
+							"    pm.expect(response.title).to.eql(\"OK\");  // Verifica que o 'title' é \"OK\"\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "{{Cookie}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"{{email_aluno}}\",\r\n  \"nome\": \"{{nome_aluno}}\",\r\n  \"password\": \"{{password}}\",\r\n  \"acesso\": \"USER\",\r\n  \"ativo\": 1\r\n}\r\n"
+				},
+				"url": {
+					"raw": "{{BASEURL}}api/v1/Aluno/add",
+					"host": [
+						"{{BASEURL}}api"
+					],
+					"path": [
+						"v1",
+						"Aluno",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deve retornar o aluno com nome correto",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Deve retornar o aluno com nome correto\", function () {\r",
+							"    pm.response.to.have.status(200); \r",
+							"    var responseText = pm.response.text();  \r",
+							"    pm.expect(responseText).to.eql(\"Lívia  Silva\");  \r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASEURL}}api/v1/Aluno/get/liviacecilia110@gmail.com",
+					"host": [
+						"{{BASEURL}}api"
+					],
+					"path": [
+						"v1",
+						"Aluno",
+						"get",
+						"liviacecilia110@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Tempo de resposta menor que 100ms",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Tempo de resposta menor que 100ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(100); \r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "{{Cookie}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"liviaacelia1756@gmail.com\",\r\n  \"nome\": \"Lívia Gomes da Silva\",\r\n  \"password\": \"123\",\r\n  \"acesso\": \"USER\",\r\n  \"ativo\": 1\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASEURL}}api/v1/Aluno/add",
+					"host": [
+						"{{BASEURL}}api"
+					],
+					"path": [
+						"v1",
+						"Aluno",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verifica se o 'detail' é 'Posted'",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verifica se o 'detail' é 'Posted'\", function () {\r",
+							"    var response = pm.response.json();\r",
+							"    pm.expect(response.detail).to.eql(\"Posted\"); \r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "{{Cookie}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"liviaacelia20@gmail.com\",\r\n  \"nome\": \"Cecília Silva Gomes\",\r\n  \"password\": \"senha123\",\r\n  \"acesso\": \"USER\",\r\n  \"ativo\": 1\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASEURL}}api/v1/Aluno/add",
+					"host": [
+						"{{BASEURL}}api"
+					],
+					"path": [
+						"v1",
+						"Aluno",
+						"add"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
