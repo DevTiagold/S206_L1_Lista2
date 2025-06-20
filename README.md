@@ -1,3 +1,5 @@
+---
+
 ## 📡 Testes de API - FetinNet com Postman
 
 Este projeto contém os testes da API da plataforma [FetinNet](https://fetin-api.confianopai.com), desenvolvidos durante a disciplina. O objetivo é validar os endpoints da aplicação de forma automatizada utilizando o Postman e o Newman.
@@ -5,9 +7,12 @@ Este projeto contém os testes da API da plataforma [FetinNet](https://fetin-api
 ## 🧪 Objetivo
 
 Realizar testes completos da API, focando em 3 suítes principais:
-- Projetos
-- Alunos
-- **Orientador** ✅ *(implementado neste projeto -- Branch "orientador")*
+
+* Projetos
+* Alunos
+* **Orientador** ✅ *(implementado neste projeto -- Branch "orientador")*
+
+> 🔎 **Observação:** 3 testes da suíte **Alunos** já estão implementados na branch `alunos`.
 
 Cada suíte deve conter **no mínimo 6 testes**, incluindo pelo menos **1 caso negativo**.
 
@@ -15,10 +20,11 @@ Cada suíte deve conter **no mínimo 6 testes**, incluindo pelo menos **1 caso n
 
 ## 🛠️ Tecnologias Utilizadas
 
-- [Postman](https://www.postman.com/)
-- [Newman (CLI)](https://www.npmjs.com/package/newman)
-- Node.js (para executar o Newman)
-- JSON (para definir as coleções e ambientes)
+* [Postman](https://www.postman.com/)
+* [Newman (CLI)](https://www.npmjs.com/package/newman)
+* Node.js (para executar o Newman)
+* JSON (para definir as coleções e ambientes)
 
 ---
+
 
